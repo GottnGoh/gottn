@@ -1,4 +1,4 @@
-// Gottn version 1.0.0
+// Gottn version 1.0.1
 
 let Gottn = function (blueprint) {
 	const _DEBUG = false;
@@ -49,20 +49,14 @@ let Gottn = function (blueprint) {
 		return uuid4.join("");
 	}
 
-	function _overwrite_hash (base, overwrite) {
-		if (!is_empty(overwrite)) {
-			for (var key in base) {
-				if (key in overwrite) {
-					base[key] = overwrite[key];
+	function store (new_data) {
+		if (new_data) {
+			for (var key in data) {
+				if (key in new_data) {
+					data[key] = new_data[key];
 				}
 			}
 		}
-	
-		return base;
-	}
-
-	function store (new_data) {
-		_overwrite_hash(data, new_data);
 		if (_DEBUG) console.log(id, blueprint.name + '.store', data);
 		return this;
 	}
@@ -75,7 +69,7 @@ let Gottn = function (blueprint) {
 		html = html.trim().replace(/^(<[a-zA-Z]+)/, `$1 data-gottn-id="${id}" data-gottn-name="${blueprint.name}"`);
 
 		// replace html
-		if (is_empty(element)) {
+		if (!element) {
 			element = document.querySelector(`[data-gottn-id="${id}"]`);
 		}
 		element.outerHTML = html;

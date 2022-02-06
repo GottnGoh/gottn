@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>Example</title>
+		<script type='text/javascript' src='gottn.js'></script>
+    </head>
+    <body>
+        <h3>Use of SNS</h3>
+        <div id="user_list"></div>
+		<script type="text/javascript">
+            const GENDERS = ['Male', 'Female', 'Other'];
+            const SNS     = ['Facebook', 'WhatsApp', 'Instagram', 'TikTok', 'Twitter', 'Other'];
+
+            let STORAGE = {
+                userList: [
+                    { name: 'George', gender: 0, sns: [0, 1, 3] },
+                    { name: 'Ken',    gender: 2, sns: []        },
+                    { name: 'Naomi',  gender: 1, sns: [2, 5]    }
+                ]
+            };
+
+            let UserBlueprint = {
+                name: 'User',
+                data: {
+                    no  : 0,
+                    user: {
+                        name  : '',
+                        gender: -1,
+                        sns   : []
+                    }
+                },
+                render: function () {
+                    let snsList = [];
+                    this.data.user.sns.forEach(sns => snsList.push(SNS[sns]));
+
+                    return `<tr>
+                        <td>${this.data.no}</td>
+                        <td>${this.data.user.name}</td>
+                        <td>${GENDERS[this.data.user.gender]}</td>
+                        <td>${snsList.join(', ')}</td>
+                        <td><button ${this.onclick('edit')} type="button">Edit</button></td>
+                        <td><button ${this.onclick('delete')} type="button">Delete</button></td>
+                    </tr>`;
+                },
+                actions: {
+                    edit: function (event) {
+                        userDetailGtn.store({ no: this.data.no }).render(userListGtn.element);
+                    },
+                    delete: function (event) {
+                        if (window.confirm('Delete?')) {
+                            STORAGE.userList.splice(this.data.no - 1, 1);
+                            userListGtn.render();
+                        }
+                    }
+                }
+            }
+
+            let userListGtn = Gottn({
+                name: 'UserList',
+                data: {
+                    userList: [],
+                },
+                render: function () {
+                    let userHtml = '';
+                    this.data.userList.forEach((user, index) => {
+                        let userGtn = Gottn(UserBlueprint).store({ no: index + 1, user: user });
+			            userHtml += this.children(userGtn);
+                    });
+
+                    let genderHtml = '';
+                    GENDERS.forEach((gender, index) => genderHtml += `<option value="${index}">${gender}`);
+                    genderHtml = `<select name="gender">${genderHtml}<select>`;
+
+                    let snsHtml = '';
+                    SNS.forEach((sns, index) => snsHtml += `<input type="checkbox" name="sns" value="${index}">${sns} `);
+
+                    return `
+                        <table>
+                            <thead>
+                                <tr><th>No</th><th>Name</th><th>Gender</th><th>SNS</th><th colspan="2"></th></tr>
+                            </thead>
+                            <tbody>${userHtml}</tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="6"><button ${this.onclick('add')} type="button">Add</button></td>
+                                </tr>
+                            </tfoot>
+                        </table>`;
+                },
+                rendered: function () {
+                    this.element.querySelectorAll('tbody tr:nth-child(odd)').forEach(element => element.style.backgroundColor = 'silver');
+                },
+                actions: {
+                    add: function (event) {
+                        userDetailGtn.store({ no: 0 }).render(this.element);
+                    }
+                }
+            });
+
+            let userDetailGtn = Gottn({
+                name: 'UserDetail',
+                data: {
+                    no: 0
+                },
+                render: function () {
+                    let user = STORAGE.userList.find((user, index) => (index + 1) == this.data.no);
+                    if (!user) {
+                        user = {
+                            name  : '',
+                            gender: 2,
+                            sns   : []
+                        };
+                    }
+
+                    let genderHtml = '';
+                    GENDERS.forEach((gender, index) =>
+                        genderHtml += `<option value="${index}" ${user.gender == index ? 'selected' : ''}>${gender}`
+                    );
+                    genderHtml = `<select name="gender">${genderHtml}<select>`;
+
+                    let snsHtml = '';
+                    SNS.forEach((sns, index) =>
+                        snsHtml +=
+                            `<label for="sns${index}">
+                                <input id="sns${index}" name="sns" value="${index}" ${user.sns.includes(index) ? 'checked' : ''} type="checkbox">${sns}
+                            </label>`
+                    );
+
+                    return `
+                        <form name="user">
+                            <dl>
+                                <dt>No</dt>
+                                <dd>${this.data.no || ''}</dd>
+                                <dt>Name<spna style="color: red">*</span></dt>
+                                <dd><input value="${user.name}" name="name" type="text"></dd>
+                                <dt>Gender</dt>
+                                <dd>${genderHtml}</dd>
+                                <dt>SNS</dt>
+                                <dd>${snsHtml}</dd>
+                            </dl>
+                            <button ${this.onclick('save')} type="button">Save</button>
+                            <button ${this.onclick('back')} type="button">Back</button>
+                        </form>`;
+                },
+                actions: {
+                    save: function (event) {
+                        let userForm = document.forms.user;
+                        
+                        if (!userForm.name.value) {
+                            window.alert('Name is required.');
+                            return;
+                        }
+
+                        let sns = [];
+                        userForm.sns.forEach(checkbox => {
+                            if (checkbox.checked) sns.push(parseInt(checkbox.value));
+                        });
+
+                        if (this.data.no) {
+                            let user = STORAGE.userList[this.data.no - 1];
+                            user.name   = userForm.name.value;
+                            user.gender = parseInt(userForm.gender.value);
+                            user.sns    = sns;
+                        } else {
+                            STORAGE.userList.push({
+                                no    : STORAGE.userList.length + 1,
+                                name  : userForm.name.value,
+                                gender: parseInt(userForm.gender.value),
+                                sns   : sns
+                            });
+                        }
+
+                        userListGtn.store({ userList: STORAGE.userList }).render(this.element);
+                    },
+                    back: function (event) {
+                        userListGtn.render(this.element);
+                    }
+                }
+            });
+
+            userListGtn.store({ userList: STORAGE.userList }).render(document.getElementById('user_list'));
+        </script>
+    </body>
+</html>

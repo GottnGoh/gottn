@@ -14,4 +14,4 @@ It works if you only this one.
 
 # Example
 
-example.html(examples/example.html)
+[example.html](examples/example.html)

@@ -14,4 +14,4 @@ jQueryやnode.jsなどの他のライブラリは必要ありません。
 
 # 使用例
 
-example.html(examples/example.html)
+[example.html](examples/example.html)

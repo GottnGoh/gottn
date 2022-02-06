@@ -1,4 +1,4 @@
-[日本語](READMI.jp.md)
+[日本語](README.jp.md)
 
 # gottn
 

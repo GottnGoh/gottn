@@ -1,4 +1,4 @@
-// Gottn version 1.0.1
+// Gottn version 1.0.2
 
 let Gottn = function (blueprint) {
 	const _DEBUG = false;
@@ -71,6 +71,9 @@ let Gottn = function (blueprint) {
 		// replace html
 		if (!element) {
 			element = document.querySelector(`[data-gottn-id="${id}"]`);
+			if (!element) {
+				throw new Error('No Element: Check the arguments of render.');
+			}
 		}
 		element.outerHTML = html;
 		element = document.querySelector(`[data-gottn-id="${id}"][data-gottn-name="${blueprint.name}"]`);

@@ -9,7 +9,7 @@
 # インストール
 
 ```html
-	<script type='text/javascript' src='js/gottn.js'></script>
+	<script type='text/javascript' src='js/gottn.min.js'></script>
 ```
 
 # 使用例

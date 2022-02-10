@@ -3,14 +3,10 @@
 let Gottn = function (blueprint) {
 	const _DEBUG = false;
 	
-	if (!('name' in blueprint)) {
-		throw new Error('"name" is not defined in "blueprint"');
-	}
-	if (!('render' in blueprint)) {
-		throw new Error('"render" is not defined in "blueprint"');
-	}
-	if (typeof blueprint.render != 'function') {
-		throw new Error('"render" is not a function in "blueprint"');
+	if ('render' in blueprint) {
+		if (typeof blueprint.render != 'function') {
+			throw new Error('"render" is not a function in "blueprint"');
+		}
 	}
 	if ('rendered' in blueprint) {
 		if (typeof blueprint.rendered != 'function') {
@@ -18,7 +14,7 @@ let Gottn = function (blueprint) {
 		}
 	}
 
-	let id         = _uuid4();
+	let id         = (blueprint.name ? blueprint.name + '-' : '') + _uuid4();
 	let data       = 'data' in blueprint ? Object.create(blueprint.data) : {};
 	let html       = '';
 	let child_list = [];
@@ -66,7 +62,7 @@ let Gottn = function (blueprint) {
 
 		// blueprint.render
 		html = blueprint.render.call(this);
-		html = html.trim().replace(/^(<[a-zA-Z]+)/, `$1 data-gottn-id="${id}" data-gottn-name="${blueprint.name}"`);
+		html = html.trim().replace(/^(<[a-zA-Z]+)/, `$1 data-gottn-id="${id}"`);
 
 		// replace html
 		if (!element) {
@@ -76,16 +72,13 @@ let Gottn = function (blueprint) {
 			}
 		}
 		element.outerHTML = html;
-		element = document.querySelector(`[data-gottn-id="${id}"][data-gottn-name="${blueprint.name}"]`);
+		element = document.querySelector(`[data-gottn-id="${id}"]`);
 
 		// assign GlobalEventHander
-		let element_list = document.querySelectorAll(`[data-gottn-id="${id}"][data-gottn-action]`);
+		let element_list = document.querySelectorAll(`[data-gottn-action$="${id}"]`);
 		if (element_list) {
 			for (let index = 0; index < element_list.length; index++) {
-				let on_name_action_key = element_list[index].getAttribute(`data-gottn-action`).split(',', 2);
-				let on_name            = on_name_action_key[0];
-				let action_key         = on_name_action_key[1];
-
+				let [on_name, action_key, id] = element_list[index].getAttribute(`data-gottn-action`).split(' ', 3);
 				element_list[index][on_name] = blueprint.actions[action_key].bind(this);
 			}
 		}
@@ -93,7 +86,7 @@ let Gottn = function (blueprint) {
 		// child elements
 		child_list.forEach( function (child) {
 			if (typeof child.render == 'function') {
-				child.render(document.querySelector(`[data-gottn-id="${child.id}"][data-gottn-name="${child.name}"]`));
+				child.render(document.querySelector(`[data-gottn-id="${child.id}"]`));
 			}
 		});
 
@@ -108,11 +101,11 @@ let Gottn = function (blueprint) {
 	function children (child) {
 		if (_DEBUG) console.log(id, blueprint.name + '.children', child);
 		child_list.push(child);
-		return `<template data-gottn-id="${child.id}" data-gottn-name="${child.name}"></template>`;
+		return `<template data-gottn-id="${child.id}"></template>`;
 	}
 
 	function _element () {
-		return document.querySelector(`[data-gottn-id="${id}"][data-gottn-name="${blueprint.name}"]`);
+		return document.querySelector(`[data-gottn-id="${id}"]`);
 	}
 
 	let gottn = {
@@ -131,7 +124,7 @@ let Gottn = function (blueprint) {
 	// prepare to assign GlobalEventHander
 	on_name_list.forEach(function (on_name) {
 		gottn[on_name] = function (action_key) {
-			return `data-gottn-id="${id}" data-gottn-action="${on_name},${action_key}"`;
+			return `data-gottn-action="${on_name} ${action_key} ${id}"`;
 		};
 	});
 

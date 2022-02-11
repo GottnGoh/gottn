@@ -88,7 +88,8 @@
                         </table>`;
                 },
                 rendered: function () {
-                    this.element.querySelectorAll('tbody tr:nth-child(odd)').forEach(element => element.style.backgroundColor = 'silver');
+                    this.element.querySelectorAll(`[data-gottn-id^="${UserBlueprint.name}-"]:nth-child(odd)`)
+                        .forEach(element => element.style.backgroundColor = 'silver');
                 },
                 actions: {
                     add: function (event) {

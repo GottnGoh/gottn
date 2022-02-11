@@ -68,20 +68,24 @@ let Gottn = function (blueprint) {
 		if (!element) {
 			element = document.querySelector(`[data-gottn-id="${id}"]`);
 			if (!element) {
-				throw new Error('No Element: Check the arguments of render.');
+				throw new Error('No element: Check the arguments of render.');
 			}
 		}
 		element.outerHTML = html;
 		element = document.querySelector(`[data-gottn-id="${id}"]`);
 
 		// assign GlobalEventHander
-		let element_list = document.querySelectorAll(`[data-gottn-action$="${id}"]`);
-		if (element_list) {
-			for (let index = 0; index < element_list.length; index++) {
-				let [on_name, action_key, id] = element_list[index].getAttribute(`data-gottn-action`).split(' ', 3);
-				element_list[index][on_name] = blueprint.actions[action_key].bind(this);
-			}
+		let element_list = Array.from(element.querySelectorAll(`[data-gottn-action]`));
+		if (element.getAttribute('data-gottn-action')) {
+			element_list.push(element);
 		}
+		element_list.forEach(action_element => {
+			let [on_name, action_key] = action_element.getAttribute(`data-gottn-action`).split(' ', 2);
+			if (!blueprint.actions[action_key]) {
+				throw new Error(`"${action_key}" is not defined in "blueprint.actions"`);
+			}
+			action_element[on_name] = blueprint.actions[action_key].bind(this);
+		});
 
 		// child elements
 		child_list.forEach( function (child) {
@@ -124,7 +128,7 @@ let Gottn = function (blueprint) {
 	// prepare to assign GlobalEventHander
 	on_name_list.forEach(function (on_name) {
 		gottn[on_name] = function (action_key) {
-			return `data-gottn-action="${on_name} ${action_key} ${id}"`;
+			return `data-gottn-action="${on_name} ${action_key}"`;
 		};
 	});
 

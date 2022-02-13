@@ -31,8 +31,7 @@
                     }
                 },
                 render: function () {
-                    let snsList = [];
-                    this.data.user.sns.forEach(sns => snsList.push(SNS[sns]));
+                    let snsList = this.data.user.sns.map(sns => SNS[sns]);
 
                     return `<tr ${this.onclick('root_tag_event')}>
                         <td>${this.data.no}</td>
@@ -65,7 +64,7 @@
                     userList: [],
                 },
                 render: function () {
-                    let userEmbedMarker = this.data.userList.map((user, index) =>
+                    let userEmbedMark = this.data.userList.map((user, index) =>
                         this.embed(Gottn(UserBlueprint).store({ no: index + 1, user: user }))
                     ).join('');
 
@@ -74,7 +73,7 @@
                             <thead>
                                 <tr><th>No</th><th>Name</th><th>Gender</th><th>SNS</th><th colspan="2"></th></tr>
                             </thead>
-                            <tbody>${userEmbedMarker}</tbody>
+                            <tbody>${userEmbedMark}</tbody>
                             <tfoot>
                                 <tr>
                                     <td colspan="6"><button ${this.onclick('add')} type="button">Add</button></td>
@@ -149,21 +148,27 @@
                             if (checkbox.checked) sns.push(parseInt(checkbox.value));
                         });
 
+                        let user = {
+                            no    : this.data.no,
+                            name  : userForm.name.value,
+                            gender: parseInt(userForm.gender.value),
+                            sns   : sns
+                        };
+
                         if (this.data.no) {
-                            let user = STORAGE.userList[this.data.no - 1];
-                            user.name   = userForm.name.value;
-                            user.gender = parseInt(userForm.gender.value);
-                            user.sns    = sns;
+                            this.update$(user);
                         } else {
-                            STORAGE.userList.push({
-                                no    : STORAGE.userList.length + 1,
-                                name  : userForm.name.value,
-                                gender: parseInt(userForm.gender.value),
-                                sns   : sns
-                            });
+                            this.insert$(user);
                         }
 
                         userListGtn.store({ userList: STORAGE.userList }).render(this.element);
+                    },
+                    update: function (user) {
+                        STORAGE.userList[user.no - 1] = user;
+                    },
+                    insert: function (user) {
+                        user.no = STORAGE.userList.length + 1;
+                        STORAGE.userList.push(user);
                     },
                     back: function (event) {
                         userListGtn.render(this.element);

@@ -103,12 +103,12 @@ let Gottn = function (blueprint) {
 	}
 
 	function embed (child) {
-		if (_DEBUG) console.log(id, blueprint.name + '.children', child);
+		if (_DEBUG) console.log(id, blueprint.name + '.embed', child);
 		child_list.push(child);
 		return `<template data-gottn-id="${child.id}"></template>`;
 	}
 
-	function _element () {
+	function element () {
 		return document.querySelector(`[data-gottn-id="${id}"]`);
 	}
 
@@ -118,17 +118,17 @@ let Gottn = function (blueprint) {
 		get data     () { return data; },
 		get html     () { return html; },
 		get rendered () { return blueprint.rendered; },
-		get element  () { return _element(); },
+		get element  () { return element(); },
 		store : store,
 		render: render,
 		embed : embed,
-		functions: {},
-		get f () { return this.functions; }
+		functions: {}
 	};
 
 	// bind 'this'(Gottn object) to function
 	for (let function_name in blueprint.functions) {
-		gottn.functions[function_name] = blueprint.functions[function_name].bind(gottn);
+		gottn[function_name + '$'] = gottn.functions[function_name] =
+			blueprint.functions[function_name].bind(gottn);
 	};
 	
 	// prepare to assign GlobalEventHander

@@ -1,4 +1,4 @@
-// Gottn version 1.2.0
+// Gottn version 1.2.1
 
 let Gottn = function (blueprint) {
 	const _DEBUG = false;

@@ -123,7 +123,7 @@ let Gottn = function (blueprint) {
 		render: render,
 		embed : embed,
 		functions: {},
-		get fs () { return this.functions; }
+		get f () { return this.functions; }
 	};
 
 	// bind 'this'(Gottn object) to function

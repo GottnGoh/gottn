@@ -34,7 +34,7 @@
                     let snsList = [];
                     this.data.user.sns.forEach(sns => snsList.push(SNS[sns]));
 
-                    return `<tr ${this.onclick('test')}>
+                    return `<tr ${this.onclick('root_tag_event')}>
                         <td>${this.data.no}</td>
                         <td>${this.data.user.name}</td>
                         <td>${GENDERS[this.data.user.gender]}</td>
@@ -43,7 +43,7 @@
                         <td><button ${this.onclick('delete')} type="button">Delete</button></td>
                     </tr>`;
                 },
-                actions: {
+                functions: {
                     edit: function (event) {
                         userDetailGtn.store({ no: this.data.no }).render(userListGtn.element);
                     },
@@ -53,8 +53,8 @@
                             userListGtn.render();
                         }
                     },
-                    test: function (event) {
-                        console.log('test');
+                    root_tag_event: function (event) {
+                        console.log('root tag event');
                     }
                 }
             }
@@ -86,7 +86,7 @@
                     this.element.querySelectorAll(`[data-gottn-id^="${UserBlueprint.name}-"]:nth-child(odd)`)
                         .forEach(element => element.style.backgroundColor = 'silver');
                 },
-                actions: {
+                functions: {
                     add: function (event) {
                         userDetailGtn.store({ no: 0 }).render(this.element);
                     }
@@ -135,7 +135,7 @@
                             <button ${this.onclick('back')} type="button">Back</button>
                         </form>`;
                 },
-                actions: {
+                functions: {
                     save: function (event) {
                         let userForm = document.forms.user;
                         

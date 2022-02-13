@@ -75,16 +75,16 @@ let Gottn = function (blueprint) {
 		element = document.querySelector(`[data-gottn-id="${id}"]`);
 
 		// assign GlobalEventHander
-		let element_list = Array.from(element.querySelectorAll(`[data-gottn-action]`));
-		if (element.getAttribute('data-gottn-action')) {
+		let element_list = Array.from(element.querySelectorAll(`[data-gottn-event]`));
+		if (element.getAttribute('data-gottn-event')) {
 			element_list.push(element);
 		}
-		element_list.forEach(action_element => {
-			let [on_name, action_key] = action_element.getAttribute(`data-gottn-action`).split(' ', 2);
-			if (!blueprint.actions[action_key]) {
-				throw new Error(`"${action_key}" is not defined in "blueprint.actions"`);
+		element_list.forEach(event_element => {
+			let [on_name, function_name] = event_element.getAttribute(`data-gottn-event`).split(' ', 2);
+			if (!blueprint.functions[function_name]) {
+				throw new Error(`"${function_name}" is not defined in "blueprint.functions"`);
 			}
-			action_element[on_name] = blueprint.actions[action_key].bind(this);
+			event_element[on_name] = blueprint.functions[function_name].bind(this);
 		});
 
 		// child elements
@@ -118,17 +118,23 @@ let Gottn = function (blueprint) {
 		get data     () { return data; },
 		get html     () { return html; },
 		get rendered () { return blueprint.rendered; },
-		get actions  () { return blueprint.actions;  },
 		get element  () { return _element(); },
 		store : store,
 		render: render,
-		embed : embed
+		embed : embed,
+		functions: {},
+		get fs () { return this.functions; }
+	};
+
+	// bind 'this'(Gottn object) to function
+	for (let function_name in blueprint.functions) {
+		gottn.functions[function_name] = blueprint.functions[function_name].bind(gottn);
 	};
 	
 	// prepare to assign GlobalEventHander
 	on_name_list.forEach(function (on_name) {
-		gottn[on_name] = function (action_key) {
-			return `data-gottn-action="${on_name} ${action_key}"`;
+		gottn[on_name] = function (function_name) {
+			return `data-gottn-event="${on_name} ${function_name}"`;
 		};
 	});
 

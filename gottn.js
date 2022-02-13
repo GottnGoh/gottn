@@ -102,7 +102,7 @@ let Gottn = function (blueprint) {
 		return this;
 	}
 
-	function children (child) {
+	function embed (child) {
 		if (_DEBUG) console.log(id, blueprint.name + '.children', child);
 		child_list.push(child);
 		return `<template data-gottn-id="${child.id}"></template>`;
@@ -120,9 +120,9 @@ let Gottn = function (blueprint) {
 		get rendered () { return blueprint.rendered; },
 		get actions  () { return blueprint.actions;  },
 		get element  () { return _element(); },
-		store   : store,
-		render  : render,
-		children: children
+		store : store,
+		render: render,
+		embed : embed
 	};
 	
 	// prepare to assign GlobalEventHander

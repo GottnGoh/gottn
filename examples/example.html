@@ -2,7 +2,8 @@
 <html>
 	<head>
         <title>Example</title>
-		<script type='text/javascript' src='gottn.min.js'></script>
+		<!-- <script type='text/javascript' src='gottn.min.js'></script> -->
+		<script type='text/javascript' src='../gottn.js'></script>
     </head>
     <body>
         <h3>Use of SNS</h3>
@@ -33,7 +34,7 @@
                     let snsList = [];
                     this.data.user.sns.forEach(sns => snsList.push(SNS[sns]));
 
-                    return `<tr>
+                    return `<tr ${this.onclick('test')}>
                         <td>${this.data.no}</td>
                         <td>${this.data.user.name}</td>
                         <td>${GENDERS[this.data.user.gender]}</td>
@@ -51,6 +52,9 @@
                             STORAGE.userList.splice(this.data.no - 1, 1);
                             userListGtn.render();
                         }
+                    },
+                    test: function (event) {
+                        console.log('test');
                     }
                 }
             }
@@ -61,25 +65,16 @@
                     userList: [],
                 },
                 render: function () {
-                    let userHtml = '';
-                    this.data.userList.forEach((user, index) => {
-                        let userGtn = Gottn(UserBlueprint).store({ no: index + 1, user: user });
-			            userHtml += this.children(userGtn);
-                    });
-
-                    let genderHtml = '';
-                    GENDERS.forEach((gender, index) => genderHtml += `<option value="${index}">${gender}`);
-                    genderHtml = `<select name="gender">${genderHtml}<select>`;
-
-                    let snsHtml = '';
-                    SNS.forEach((sns, index) => snsHtml += `<input type="checkbox" name="sns" value="${index}">${sns} `);
+                    let userEmbedMarker = this.data.userList.map((user, index) =>
+                        this.embed(Gottn(UserBlueprint).store({ no: index + 1, user: user }))
+                    ).join('');
 
                     return `
                         <table>
                             <thead>
                                 <tr><th>No</th><th>Name</th><th>Gender</th><th>SNS</th><th colspan="2"></th></tr>
                             </thead>
-                            <tbody>${userHtml}</tbody>
+                            <tbody>${userEmbedMarker}</tbody>
                             <tfoot>
                                 <tr>
                                     <td colspan="6"><button ${this.onclick('add')} type="button">Add</button></td>
@@ -113,19 +108,16 @@
                         };
                     }
 
-                    let genderHtml = '';
-                    GENDERS.forEach((gender, index) =>
-                        genderHtml += `<option value="${index}" ${user.gender == index ? 'selected' : ''}>${gender}`
-                    );
+                    let genderHtml = GENDERS.map((gender, index) =>
+                        `<option value="${index}" ${user.gender == index ? 'selected' : ''}>${gender}`
+                    ).join('');
                     genderHtml = `<select name="gender">${genderHtml}<select>`;
 
-                    let snsHtml = '';
-                    SNS.forEach((sns, index) =>
-                        snsHtml +=
-                            `<label for="sns${index}">
-                                <input id="sns${index}" name="sns" value="${index}" ${user.sns.includes(index) ? 'checked' : ''} type="checkbox">${sns}
-                            </label>`
-                    );
+                    let snsHtml = SNS.map((sns, index) =>
+                        `<label for="sns${index}">
+                            <input id="sns${index}" name="sns" value="${index}" ${user.sns.includes(index) ? 'checked' : ''} type="checkbox">${sns}
+                        </label>`
+                    ).join('');
 
                     return `
                         <form name="user">

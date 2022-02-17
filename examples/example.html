@@ -33,28 +33,26 @@
                 render: function () {
                     let snsList = this.data.user.sns.map(sns => SNS[sns]);
 
-                    return `<tr ${this.onclick('root_tag_event')}>
+                    return `<tr ${this.onclick('$root_tag_event')}>
                         <td>${this.data.no}</td>
                         <td>${this.data.user.name}</td>
                         <td>${GENDERS[this.data.user.gender]}</td>
                         <td>${snsList.join(', ')}</td>
-                        <td><button ${this.onclick('edit')} type="button">Edit</button></td>
-                        <td><button ${this.onclick('delete')} type="button">Delete</button></td>
+                        <td><button ${this.onclick('$edit')} type="button">Edit</button></td>
+                        <td><button ${this.onclick('$delete')} type="button">Delete</button></td>
                     </tr>`;
                 },
-                functions: {
-                    edit: function (event) {
-                        userDetailGtn.store({ no: this.data.no }).render(userListGtn.element);
-                    },
-                    delete: function (event) {
-                        if (window.confirm('Delete?')) {
-                            STORAGE.userList.splice(this.data.no - 1, 1);
-                            userListGtn.render();
-                        }
-                    },
-                    root_tag_event: function (event) {
-                        console.log('root tag event');
+                $edit: function (event) {
+                    userDetailGtn.store({ no: this.data.no }).render(userListGtn.element);
+                },
+                $delete: function (event) {
+                    if (window.confirm('Delete?')) {
+                        STORAGE.userList.splice(this.data.no - 1, 1);
+                        userListGtn.render();
                     }
+                },
+                $root_tag_event: function (event) {
+                    console.log('root tag event');
                 }
             }
 
@@ -76,7 +74,9 @@
                             <tbody>${userEmbedMark}</tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="6"><button ${this.onclick('add')} type="button">Add</button></td>
+                                    <td colspan="6"><button ${this.onclick('$add')} type="button">Add</button>
+                                    <button ${this.onclick('$test')} type="button">Test</button>
+                                    <button ${this.onclick('$testA')} type="button">TestA</button></td>
                                 </tr>
                             </tfoot>
                         </table>`;
@@ -85,10 +85,35 @@
                     this.element.querySelectorAll(`[data-gottn-id^="${UserBlueprint.name}-"]:nth-child(odd)`)
                         .forEach(element => element.style.backgroundColor = 'silver');
                 },
-                functions: {
-                    add: function (event) {
-                        userDetailGtn.store({ no: 0 }).render(this.element);
-                    }
+                $add: function (event) {
+                    userDetailGtn.store({ no: 0 }).render(this.element);
+                },
+                $test: function (event) {
+                    console.log('test');
+                    this.$test1();
+                    this.$test1();
+                    this.$test1.call(this);
+                    this.$test2(this.data);
+                    this.$test2.call(this, this.data);
+                    this.$test3();
+                    this.$test3.call(this);
+                    this.$test4(this.data);
+                    this.$test4.call(this, this.data);
+                },
+                $testA: function (event) {
+                    this.$test(event);
+                },
+                $test1: function () {
+                    console.log('test1', this.data);
+                },
+                $test2: function (value) {
+                    console.log('test2', this.data, value);
+                },
+                $test3: () => {
+                    console.log('test3', this.data);
+                },
+                $test4: value => {
+                    console.log('test4', this.data, value);
                 }
             });
 
@@ -130,49 +155,47 @@
                                 <dt>SNS</dt>
                                 <dd>${snsHtml}</dd>
                             </dl>
-                            <button ${this.onclick('save')} type="button">Save</button>
-                            <button ${this.onclick('back')} type="button">Back</button>
+                            <button ${this.onclick('$save')} type="button">Save</button>
+                            <button ${this.onclick('$back')} type="button">Back</button>
                         </form>`;
                 },
-                functions: {
-                    save: function (event) {
-                        let userForm = document.forms.user;
-                        
-                        if (!userForm.name.value) {
-                            window.alert('Name is required.');
-                            return;
-                        }
-
-                        let sns = [];
-                        userForm.sns.forEach(checkbox => {
-                            if (checkbox.checked) sns.push(parseInt(checkbox.value));
-                        });
-
-                        let user = {
-                            no    : this.data.no,
-                            name  : userForm.name.value,
-                            gender: parseInt(userForm.gender.value),
-                            sns   : sns
-                        };
-
-                        if (this.data.no) {
-                            this.update$(user);
-                        } else {
-                            this.insert$(user);
-                        }
-
-                        userListGtn.store({ userList: STORAGE.userList }).render(this.element);
-                    },
-                    update: function (user) {
-                        STORAGE.userList[user.no - 1] = user;
-                    },
-                    insert: function (user) {
-                        user.no = STORAGE.userList.length + 1;
-                        STORAGE.userList.push(user);
-                    },
-                    back: function (event) {
-                        userListGtn.render(this.element);
+                $save: function (event) {
+                    let userForm = document.forms.user;
+                    
+                    if (!userForm.name.value) {
+                        window.alert('Name is required.');
+                        return;
                     }
+
+                    let sns = [];
+                    userForm.sns.forEach(checkbox => {
+                        if (checkbox.checked) sns.push(parseInt(checkbox.value));
+                    });
+
+                    let user = {
+                        no    : this.data.no,
+                        name  : userForm.name.value,
+                        gender: parseInt(userForm.gender.value),
+                        sns   : sns
+                    };
+
+                    if (this.data.no) {
+                        this.$_update(user);
+                    } else {
+                        this.$_insert(user);
+                    }
+
+                    userListGtn.store({ userList: STORAGE.userList }).render(this.element);
+                },
+                $_update: function (user) {
+                    STORAGE.userList[user.no - 1] = user;
+                },
+                $_insert: function (user) {
+                    user.no = STORAGE.userList.length + 1;
+                    STORAGE.userList.push(user);
+                },
+                $back: function (event) {
+                    userListGtn.render(this.element);
                 }
             });
 

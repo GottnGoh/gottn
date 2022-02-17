@@ -81,10 +81,10 @@ let Gottn = function (blueprint) {
 		}
 		element_list.forEach(event_element => {
 			let [on_name, function_name] = event_element.getAttribute(`data-gottn-event`).split(' ', 2);
-			if (!blueprint.functions[function_name]) {
-				throw new Error(`"${function_name}" is not defined in "blueprint.functions"`);
+			if (!blueprint[function_name]) {
+				throw new Error(`"${function_name}" is not defined in "blueprint"`);
 			}
-			event_element[on_name] = blueprint.functions[function_name].bind(this);
+			event_element[on_name] = blueprint[function_name].bind(this);
 		});
 
 		// child elements
@@ -121,14 +121,16 @@ let Gottn = function (blueprint) {
 		get element  () { return element(); },
 		store : store,
 		render: render,
-		embed : embed,
-		functions: {}
+		embed : embed
 	};
 
+	// add $function to 'this'(Gottn object)
 	// bind 'this'(Gottn object) to function
-	for (let function_name in blueprint.functions) {
-		gottn[function_name + '$'] = gottn.functions[function_name] =
-			blueprint.functions[function_name].bind(gottn);
+	for (let function_name in blueprint) {
+		if (!function_name.match(/^\$.*/)) {
+			continue;
+		}
+		gottn[function_name] = blueprint[function_name].bind(gottn);
 	};
 	
 	// prepare to assign GlobalEventHander

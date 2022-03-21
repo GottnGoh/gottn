@@ -2,16 +2,22 @@
 
 let Gottn = function (blueprint) {
 	const _DEBUG = false;
-	
-	if ('render' in blueprint) {
-		if (typeof blueprint.render != 'function') {
-			throw new Error('"render" is not a function in "blueprint"');
-		}
+
+	if (typeof blueprint != 'object' || blueprint == null) {
+		blueprint = {};
 	}
-	if ('rendered' in blueprint) {
-		if (typeof blueprint.rendered != 'function') {
-			throw new Error('"rendered" is not a function in "blueprint"');
-		}
+
+	if (!('name' in blueprint && typeof blueprint.name == 'string')) {
+		blueprint.name = '';
+	}
+	if (!('data' in blueprint && typeof blueprint.data == 'object')) {
+		blueprint.data = {};
+	}
+	if (!('render' in blueprint && typeof blueprint.render == 'function')) {
+		blueprint.render = function () { return '<span></span>'; };
+	}
+	if (!('rendered' in blueprint && typeof blueprint.rendered == 'function')) {
+		blueprint.rendered = function () {};
 	}
 
 	let id         = (blueprint.name ? blueprint.name + '-' : '') + _uuid4();
@@ -95,9 +101,7 @@ let Gottn = function (blueprint) {
 		});
 
 		// post-processing
-		if (typeof this.rendered == 'function') {
-			this.rendered();
-		}
+		this.rendered();
 
 		return this;
 	}

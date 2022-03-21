@@ -25,15 +25,15 @@ Usage: name, id, html, element
 
 ## Step 3
 Usage: rendered
-[example5.html](examples/example3.html)
+[example3.html](examples/example3.html)
 
 ## Step 4
 Usage: $ functions
-[example3.html](examples/example4.html)
+[example4.html](examples/example4.html)
 
 ## Step 5
 Usage: event
-[example4.html](examples/example5.html)
+[example5.html](examples/example5.html)
 
 ## Step 6
 Usage: embed

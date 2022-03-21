@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>example step 2</title>
+		<script type='text/javascript' src='../gottn.js'></script>
+        <link rel="stylesheet" href="example.css">
+    </head>
+    <body>
+        <h3>Step 2</h3>
+        <p>Usage: name, id, html, element</p>
+        <div id="message"></div>
+		<script type="text/javascript">
+            let message = Gottn({
+                name: 'Message',
+                data: {
+                    message: '',
+                },
+                render: function () {
+                    return `<div>${this.data.message}</div>`;
+                }
+            });
+            
+            message
+                .store({ message: 'Hello Gottn!' })
+                .render(document.getElementById('message'));
+
+            console.log('name', message.name);
+            console.log('id', message.id);
+            console.log('html', message.html);
+            console.log('element', message.element);
+        </script>
+    </body>
+</html>

@@ -124,7 +124,7 @@ let Gottn = function (blueprint) {
 
 			if (gottn_id == id) {
 				if (!blueprint[function_name]) {
-					throw new Error(`"${function_name}" is not defined in "blueprint"`);
+					throw new Error(`"${function_name}" is not defined in "${blueprint.name || 'blueprint'}"`);
 				}
 				event_element[on_name] = blueprint[function_name].bind(this);
 			}

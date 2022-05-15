@@ -62,7 +62,7 @@
                 },
                 render: function () {
                     let userEmbedMark = this.data.userList.map((user, index) =>
-                        this.embed(Gottn(UserBlueprint).store({ no: index + 1, user: user }))
+                        Gottn(UserBlueprint).store({ no: index + 1, user: user }).render('here')
                     ).join('');
 
                     return `
@@ -89,7 +89,6 @@
                 },
                 $test: function (event) {
                     console.log('test');
-                    this.$test1();
                     this.$test1();
                     this.$test1.call(this);
                     this.$test2(this.data);

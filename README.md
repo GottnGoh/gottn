@@ -36,8 +36,12 @@ Usage: event
 [example5.html](examples/example5.html)
 
 ## Step 6
-Usage: embed
+Usage: nest
 [example6.html](examples/example6.html)
+
+## Step 7
+Usage: contractor
+[example7.html](examples/example7.html)
 
 ## All features
 [example.html](examples/example.html)

@@ -2,36 +2,27 @@
 <html>
 	<head>
         <title>example step 4</title>
-		<script type='text/javascript' src='gottn.min.js'></script>
+		<!-- <script type='text/javascript' src='gottn.min.js'></script> -->
+		<script type='text/javascript' src='../gottn.js'></script>
         <link rel="stylesheet" href="example.css">
     </head>
     <body>
         <h3>Step 4</h3>
-        <p>Usage: $ functions (Allow functions are not availabe.)</p>
         <div id="message"></div>
 		<script type="text/javascript">
             let message = Gottn({
                 name: 'Message',
                 data: {
                     message: '',
-                    color  : '',
                     repeat : 0
                 },
                 render: function () {
-                    let message = this.$repeat(
-                        this.data.message,
-                        this.data.repeat
-                    );
-
-                    return `<div>${message}</div>`;
+                    return `<div>${this.$repeat(this.data.repeat)}</div>`;
                 },
-                rendered: function () {
-                    this.element.style.color = this.data.color;
-                },
-                $repeat: function (value, repeat) {
+                $repeat: function (repeat) {
                     let result = '';
                     for (let i=0; i < repeat; i++) {
-                        result += `<div>${value}</div>`;
+                        result += `<div>${this.data.message}</div>`;
                     }
                     return result;
                 }
@@ -40,7 +31,6 @@
             message
                 .store({
                     message: 'Hello Gottn!',
-                    color  : 'red',
                     repeat : 3
                 })
                 .render(document.getElementById('message'));

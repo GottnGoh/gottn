@@ -2,35 +2,33 @@
 <html>
 	<head>
         <title>example step 3</title>
-		<script type='text/javascript' src='gottn.min.js'></script>
+		<!-- <script type='text/javascript' src='gottn.min.js'></script> -->
+		<script type='text/javascript' src='../gottn.js'></script>
         <link rel="stylesheet" href="example.css">
     </head>
     <body>
         <h3>Step 3</h3>
-        <p>Usage: rendered</p>
-        <div id="form"></div>
         <div id="message"></div>
 		<script type="text/javascript">
-            let message = Gottn({
+            let Message = {
                 name: 'Message',
                 data: {
                     message: '',
-                    color  : ''
                 },
                 render: function () {
                     return `<div>${this.data.message}</div>`;
-                },
-                rendered: function () {
-                    this.element.style.color = this.data.color;
                 }
-            });
+            }
+
+            let message = Gottn(Message);
             
             message
-                .store({
-                    message: 'Hello Gottn!',
-                    color  : 'red'
-                })
+                .store({ message: 'Hello Gottn!' })
                 .render(document.getElementById('message'));
+
+            message
+                .store({ message: 'Good-bye Gottn!' })
+                .render();
         </script>
     </body>
 </html>

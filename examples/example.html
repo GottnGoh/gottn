@@ -2,7 +2,8 @@
 <html>
 	<head>
         <title>Example</title>
-		<script type='text/javascript' src='gottn.min.js'></script>
+		<!-- <script type='text/javascript' src='gottn.min.js'></script> -->
+		<script type='text/javascript' src='../gottn.js'></script>
     </head>
     <body>
         <h3>Use of SNS</h3>
@@ -47,7 +48,7 @@
                 $delete: function (event) {
                     if (window.confirm('Delete?')) {
                         STORAGE.userList.splice(this.data.no - 1, 1);
-                        userListGtn.render();
+                        userListGtn.render().$rendered();
                     }
                 },
                 $root_tag_event: function (event) {
@@ -74,44 +75,16 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="6"><button ${this.onclick('$add')} type="button">Add</button>
-                                    <button ${this.onclick('$test')} type="button">Test</button>
-                                    <button ${this.onclick('$testA')} type="button">TestA</button></td>
                                 </tr>
                             </tfoot>
                         </table>`;
                 },
-                rendered: function () {
+                $rendered: function () {
                     this.element.querySelectorAll(`[data-gottn-id^="${UserBlueprint.name}-"]:nth-child(odd)`)
                         .forEach(element => element.style.backgroundColor = 'silver');
                 },
                 $add: function (event) {
                     userDetailGtn.store({ no: 0 }).render(this.element);
-                },
-                $test: function (event) {
-                    console.log('test');
-                    this.$test1();
-                    this.$test1.call(this);
-                    this.$test2(this.data);
-                    this.$test2.call(this, this.data);
-                    this.$test3();
-                    this.$test3.call(this);
-                    this.$test4(this.data);
-                    this.$test4.call(this, this.data);
-                },
-                $testA: function (event) {
-                    this.$test(event);
-                },
-                $test1: function () {
-                    console.log('test1', this.data);
-                },
-                $test2: function (value) {
-                    console.log('test2', this.data, value);
-                },
-                $test3: () => {
-                    console.log('test3', this.data);
-                },
-                $test4: value => {
-                    console.log('test4', this.data, value);
                 }
             });
 
@@ -183,7 +156,10 @@
                         this.$_insert(user);
                     }
 
-                    userListGtn.store({ userList: STORAGE.userList }).render(this.element);
+                    userListGtn
+                        .store({ userList: STORAGE.userList })
+                        .render(this.element)
+                        .$rendered();
                 },
                 $_update: function (user) {
                     STORAGE.userList[user.no - 1] = user;
@@ -193,11 +169,14 @@
                     STORAGE.userList.push(user);
                 },
                 $back: function (event) {
-                    userListGtn.render(this.element);
+                    userListGtn.render(this.element).$rendered();
                 }
             });
 
-            userListGtn.store({ userList: STORAGE.userList }).render(document.getElementById('user_list'));
+            userListGtn
+                .store({ userList: STORAGE.userList })
+                .render(document.getElementById('user_list'))
+                .$rendered();
         </script>
     </body>
 </html>

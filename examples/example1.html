@@ -2,15 +2,15 @@
 <html>
 	<head>
         <title>example step 1</title>
-		<script type='text/javascript' src='gottn.min.js'></script>
+		<!-- <script type='text/javascript' src='gottn.min.js'></script> -->
+		<script type='text/javascript' src='../gottn.js'></script>
         <link rel="stylesheet" href="example.css">
     </head>
     <body>
         <h3>Step 1</h3>
-        <p>Usage: data, store, render</p>
         <div id="message"></div>
 		<script type="text/javascript">
-            let message = Gottn({
+            let Message = {
                 name: 'Message',
                 data: {
                     message: '',
@@ -18,7 +18,9 @@
                 render: function () {
                     return `<div>${this.data.message}</div>`;
                 }
-            });
+            }
+
+            let message = Gottn(Message);
             
             message
                 .store({ message: 'Hello Gottn!' })

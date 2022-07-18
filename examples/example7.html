@@ -8,80 +8,30 @@
     </head>
     <body>
         <h3>Step 7</h3>
-        <p>Usage: contractor</p>
         <div id="form"></div>
+        <div id="message"></div>
 		<script type="text/javascript">
-            let Message = {
+            let message = Gottn({
                 name: 'Message',
                 data: {
                     message: '',
-                    color  : '',
-                    repeat : 0
+                    color  : ''
                 },
                 render: function () {
-                    let message = this.$repeat(
-                        this.data.message,
-                        this.data.repeat
-                    );
-
-                    return `<div>${message}</div>`;
+                    return `<div>${this.data.message}</div>`;
                 },
-                rendered: function () {
+                $rendered: function () {
                     this.element.style.color = this.data.color;
-                },
-                $repeat: function (value, repeat) {
-                    let result = '';
-                    for (let i=0; i < repeat; i++) {
-                        result += `<div>${value}</div>`;
-                    }
-                    return result;
                 }
-            };
-
-            let form = Gottn({
-                name: 'Form',
-                data: {
-                    message: null
-                },
-                contractor: function () {
-                    this.data.message = Gottn(Message).store({
-                        message: 'Hello Gottn!',
-                        color  : 'black',
-                        repeat : 1
-                    });
-                },
-                render: function () {
-                    return `
-                        <form>
-                            <div>
-                                <label>repeat</label>
-                                <select ${this.onchange('$repeat')}>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label>color</lable>
-                                <button ${this.onclick('$color')} data-color="black" type="button">black</button>
-                                <button ${this.onclick('$color')} data-color="red" type="button">red</button>
-                                <button ${this.onclick('$color')} data-color="green" type="button">green</button>
-                                <button ${this.onclick('$color')} data-color="blue" type="button">blue</button>
-                            </div>
-                            ${this.data.message.render('here')}
-                        </form>`;
-                },
-                $repeat: function (event) {
-                    this.data.message.store({
-                        repeat: event.currentTarget.value
-                    }).render();
-                },
-                $color: function (event) {
-                    this.data.message.store({
-                        color: event.currentTarget.getAttribute('data-color')
-                    }).render();
-                }
-            }).render(document.getElementById('form'));
+            });
+            
+            message
+                .store({
+                    message: 'Hello Gottn!',
+                    color  : 'red'
+                })
+                .render(document.getElementById('message'))
+                .$rendered();
         </script>
     </body>
 </html>

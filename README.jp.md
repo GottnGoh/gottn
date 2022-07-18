@@ -24,10 +24,10 @@
 ### [Step 8: コールバック関数内などでGottnオブジェクトメンバにアクセスする。](#Step-8-コールバック関数内などでGottnオブジェクトメンバにアクセスする。)
 <br />
 
-## Step 1: 設計図からGottnオブジェクトを作る。 Create a Gottn object.
+## Step 1: 設計図からGottnオブジェクトを作る。
 1. 設計図のメンバとして name, data, render を用意します。
    - name: 設計図およびGottnオブジェクトの名前
-   - data: Gottnオブジェクト内で使用するデータを格納場所
+   - data: Gottnオブジェクト内で使用するデータの格納場所
    - render: 描画するhtmlを生成する処理
       - htmlテキストを返しますが、この時トップ階層のHTMLElementは１つにしてください。
          - 例:<br>
@@ -61,7 +61,7 @@ message
 Hello Gottn!
 ```
 
-## Step 2: Gottnオブジェクトのメンバ Members of the Gottn object.
+## Step 2: Gottnオブジェクトのメンバ
 - プロパティ(読み取り専用)
    - name: オブジェクトの名前
    - id: nameを接頭辞にした識別子
@@ -69,7 +69,7 @@ Hello Gottn!
    - html: 描画したhtml(テキストデータ)
    - element: 描画したHTMLElement
 - メソッド
-   - store: メンバdataを値を更新
+   - store: dataメンバを値を更新
    - render: 設計図のrenderを実行してhtmlを生成
 ### 例
 [example2.html](examples/example2.html)

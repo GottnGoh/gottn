@@ -21,26 +21,12 @@ let Gottn = function (blueprint) {
 	} else {
 		blueprint.data = {};
 	}
-	if ('contractor' in blueprint) {
-		if (typeof blueprint.contractor != 'function') {
-			throw new Error('TypeError: The type of member contractor of blueprint is not a function.');
-		}
-	} else {
-		blueprint.contractor = function () {};
-	}
 	if ('render' in blueprint) {
 		if (typeof blueprint.render != 'function') {
 			throw new Error('TypeError: The type of member render of blueprint is not a function.');
 		}
 	} else {
 		blueprint.render = function () { return '<span></span>'; };
-	}
-	if ('rendered' in blueprint) {
-		if (typeof blueprint.rendered != 'function') {
-			throw new Error('TypeError: The type of member rendered of blueprint is not a function.');
-		}
-	} else {
-		blueprint.rendered = function () {};
 	}
 
 	let id   = (blueprint.name ? blueprint.name + '-' : '') + _uuid4();
@@ -93,7 +79,7 @@ let Gottn = function (blueprint) {
 		// replace html
 		let is_embedded = false;
 		if (element === null) {
-			throw new Error('TypeError: Cannot read an element.');
+			throw new Error(`TypeError: Cannot read an element for "${blueprint.name}".`);
 		} else if (typeof element == 'string' && element.toLowerCase() === 'here') {
 			// Create the entity of the embedded element.
 			is_embedded       = true;
@@ -129,9 +115,6 @@ let Gottn = function (blueprint) {
 				event_element[on_name] = blueprint[function_name].bind(this);
 			}
 		});
-
-		// post-processing
-		this.rendered();
 
 		// Return the location of the embedded element.
 		if (is_embedded) {
@@ -179,12 +162,11 @@ let Gottn = function (blueprint) {
 	}
 
 	let gottn = {
-		get id       () { return id;   },
-		get name     () { return blueprint.name; },
-		get data     () { return data; },
-		get html     () { return html; },
-		get rendered () { return blueprint.rendered; },
-		get element  () { return element(); },
+		get id      () { return id;   },
+		get name    () { return blueprint.name; },
+		get data    () { return data; },
+		get html    () { return html; },
+		get element () { return element(); },
 		store : store,
 		render: render
 	};
@@ -208,9 +190,6 @@ let Gottn = function (blueprint) {
 			return `data-gottn-event="${gottn.id} ${on_name} ${function_name}"`;
 		};
 	});
-
-	// contractor
-	blueprint.contractor.call(gottn);
 
 	return gottn;
 };

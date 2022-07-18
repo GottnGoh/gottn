@@ -16,14 +16,14 @@
 # Usage
 
 ## Contents
-### [Step 1: Create a Gottn object from a blueprint](#Step-1-Create-a-Gottn-object-from-a-blueprint)
-### [Step 2: Members of the Gottn object](#Step-2-Members-of-the-Gottn-object)
-### [Step 3: re-render](#Step-3-re-render)
-### [Step 4: Add a method to the Gottn object](#Step-4-Add-a-method-to-the-Gottn-object)
-### [Step 5: event processing](#Step-5-event-processing)
-### [Step 6: Nesting of Gottn objects](#Step-6-Nesting-of-Gottn-objects)
-### [Step 7: Post-render processing](#Step-7-Post-render-processing)
-### [Step 8: Access Gottn members in callback functions](#Step-8-Access-Gottn-members-in-callback-functions)
+### [Step 1: Create a Gottn object from a blueprint](#step-1-create-a-gottn-object-from-a-blueprint-1)
+### [Step 2: Members of the Gottn object](#step-2-members-of-the-gottn-object-1)
+### [Step 3: re-render](#step-3-re-render-1)
+### [Step 4: Add a method to the Gottn object](#step-4-add-a-method-to-the-gottn-object-1)
+### [Step 5: event processing](#step-5-event-processing-1)
+### [Step 6: Nesting of Gottn objects](#step-6-nesting-of-gottn-objects-1)
+### [Step 7: Post-render processing](#step-7-post-render-processing-1)
+### [Step 8: Access Gottn members in callback functions](#step-8-access-gottn-members-in-callback-functions-1)
 <br />
 
 ## Step 1: Create a Gottn object from a blueprint

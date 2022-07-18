@@ -24,7 +24,7 @@
 ### [Step 8: コールバック関数内などでGottnオブジェクトメンバにアクセスする。](#Step-8-コールバック関数内などでGottnオブジェクトメンバにアクセスする。)
 <br />
 
-# Step 1: 設計図からGottnオブジェクトを作る。 Create a Gottn object.
+## Step 1: 設計図からGottnオブジェクトを作る。 Create a Gottn object.
 1. 設計図のメンバとして name, data, render を用意します。
    - name: 設計図およびGottnオブジェクトの名前
    - data: Gottnオブジェクト内で使用するデータを格納場所
@@ -37,7 +37,7 @@
 3. storeメソッドでdataメンバの値を更新します。
 4. renderメソッドで描画します。
    - 引数に描画位置(html要素)を指定します。
-## 例
+### 例
 [example1.html](examples/example1.html)
 ```javascript
 let Message = {
@@ -56,12 +56,12 @@ message
    .store({ message: 'Hello Gottn!' })
    .render(document.getElementById('message'));
 ```
-### 実行結果
+#### 実行結果
 ```
 Hello Gottn!
 ```
 
-# Step 2: Gottnオブジェクトのメンバ Members of the Gottn object.
+## Step 2: Gottnオブジェクトのメンバ Members of the Gottn object.
 - プロパティ(読み取り専用)
    - name: オブジェクトの名前
    - id: nameを接頭辞にした識別子
@@ -71,7 +71,7 @@ Hello Gottn!
 - メソッド
    - store: メンバdataを値を更新
    - render: 設計図のrenderを実行してhtmlを生成
-## 例
+### 例
 [example2.html](examples/example2.html)
 ```javascript
 let message = Gottn({
@@ -94,7 +94,7 @@ console.log('data', message.data);
 console.log('html', message.html);
 console.log('element', message.element);
 ```
-### 実行結果
+#### 実行結果
 ```
 name Message
 id Message-84d85839-0dc4-4df5-9cda-6a3a7e8a132c
@@ -105,11 +105,11 @@ data {
 element (HTMLElement)
 ```
 
-# Step 3: 再描画
+## Step 3: 再描画
 - renderメソッドで再描画する時はHTMLElement引数は不要です。
-   - 引数なしで描画した場合は同じHTMLElementに再描画します。
-      - 最初の描画時にHTMLElementを指定しないとエラーになります。
-## 例
+- 引数なしで描画した場合は同じHTMLElementに再描画します。
+- 最初の描画時にHTMLElementを指定しないとエラーになります。
+### 例
 [example3.html](examples/example3.html)
 ```javascript
 let Message = {
@@ -132,17 +132,17 @@ message
    .store({ message: 'Good-bye Gottn!' })
    .render();
 ```
-### 実行結果
+#### 実行結果
 ```
 Good-bye Gottn!
 ```
 
-# Step 4: Gottnオブジェクトにメソッドを追加する。
+## Step 4: Gottnオブジェクトにメソッドを追加する。
 - Gottnオブジェク にメソッドを追加する時はメソッド名の先頭に $ を付けます。
    - 例: $method
 - アロー関数 は 非推奨 です。
    - メソッド内でthisでGottnオブジェクトのメンバ にアクセス出来ない為
-## 例
+### 例
 [example4.html](examples/example4.html)
 ```javascript
 let message = Gottn({
@@ -170,14 +170,14 @@ message
    })
    .render(document.getElementById('message'));
 ```
-### 実行結果
+#### 実行結果
 ```
 Hello Gottn!
 Hello Gottn!
 Hello Gottn!
 ```
 
-# Step 5: イベント処理
+## Step 5: イベント処理
 - Javascript の onイベント処理 と Gottnオブジェクトメソッド を紐づけます。
 - HTMLElement に ${this.onXXX('メソッド名')} を追加します。
    - 例: `<div ${this.onclick('$test')}></div>`
@@ -185,7 +185,7 @@ Hello Gottn!
       - 例: `this.onclick('$test1')`, `this.onchange('$test2')`, etc...
 - メッソド には eventオブジェクト用引数 を１つ用意します。
    - 例: `$test: function (event) {...}`
-## 例
+### 例
 [example5.html](examples/example5.html)
 ```javascript
 let message = Gottn({
@@ -235,7 +235,7 @@ let form = Gottn({
    }
 }).render(document.getElementById('form'));
 ```
-### 実行結果
+#### 実行結果
 ```
 repeat 2▼
 
@@ -243,12 +243,12 @@ Hello Gottn!
 Hello Gottn!
 ```
 
-# Step 6: Gottnオブジェクトの入れ子
+## Step 6: Gottnオブジェクトの入れ子
 - Gottnオブジェクト内に他のGottnオブジェクトを含めることが可能です。
 - この時、renderメソッドで描画位置(HTMLElement)を指定する時に'here'を指定します。
    - 例: `gottnObject.render('here')`
 - 再描画する時は、通常の再描画と同様に引数なしでrenderメソッドを実行します。
-## 例
+### 例
 [example6.html](examples/example6.html)
 ```javascript
 let Message = {
@@ -275,16 +275,16 @@ let frame = Gottn({
    }
 }).render(document.getElementById('frame'));
 ```
-### 実行結果
+#### 実行結果
 ```
 +------------------------------------------+
 |Hello Gottn!                              |
 +------------------------------------------+
 ```
 
-# Step 7: 描画後の処理
+## Step 7: 描画後の処理
 - renderメソッドで描画後に何か処理を実行したい時は、その処理を関数化($function)して描画後に呼び出します。
-## 例
+### 例
 [example7.html](examples/example7.html)
 ```javascript
 let message = Gottn({
@@ -309,16 +309,17 @@ message
    .render(document.getElementById('message'))
    .$rendered();
 ```
-### 実行結果
+#### 実行結果
+```
+Hello Gottn!
+```
 
-<span style="color: red;">Hello Gottn!</span>
-
-# Step 8: コールバック関数内などでGottnオブジェクトメンバにアクセスする。
+## Step 8: コールバック関数内などでGottnオブジェクトメンバにアクセスする。
 - Gottnオブジェクトにアクセスする時に this を使用しますが、コールバック関数などで this を使用する時は注意が必要です。
 - 普通に無名関数内などで this にアクセスすると this は呼び出し元を指しているので、明示的に Gottnオブジェクト を指定する必要があります。
 - 明示する方法は thisArg, bind(), call() などがあります。
    - これはJavascript標準機能なので詳しくはJavascriptの資料を参考にしてください。
-## 例
+### 例
 ```javascript
 // thisArg
 [1,2,3].forEach(function(){
@@ -338,5 +339,5 @@ let test = function () {
 test.call(this);
 ```
 
-# 使用例
+# その他使用例
 [example.html](examples/example.html)

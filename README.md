@@ -33,8 +33,8 @@
    - render: Process to generate html for rendering
       - Returns html text, but at this time there should be only one HTMLElement at the top level.
          - Example:<br>
-         〇 return `<div></div>`;<br>
-         ✕ return `<div></div><div></div>`;
+         OK: return `<div></div>`;<br>
+         NG: return `<div></div><div></div>`;
 2. Create a Gottn object based on the blueprint.
 3. The store method updates the value of the data member.
 4. Render with the render method.

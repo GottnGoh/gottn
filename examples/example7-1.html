@@ -20,7 +20,8 @@
                     return `<div>${this.data.message}</div>`;
                 },
                 $rendered: function () {
-                    this.element.style.color = this.data.color;
+                    this.element.style.textTransform = 'uppercase';
+                    return this;
                 }
             });
             

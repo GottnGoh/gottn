@@ -283,9 +283,9 @@ let frame = Gottn({
 ```
 
 ## Step 7: 描画後の処理
-- renderメソッドで描画後に何か処理を実行したい時は、その処理を関数化($function)して描画後に呼び出します。
+- renderメソッドで描画後に何か処理を実行したい時は、その処理を関数化($function)して描画後に呼び出すか、一連の処理をまとめた関数($function)を用意します。
 ### 例
-[example7.html](examples/example7.html)
+[example7-1.html](examples/example7-1.html)
 ```javascript
 let message = Gottn({
    name: 'Message',
@@ -297,7 +297,8 @@ let message = Gottn({
       return `<div>${this.data.message}</div>`;
    },
    $rendered: function () {
-      this.element.style.color = this.data.color;
+      this.element.style.textTransform = 'uppercase';
+      return this;
    }
 });
 
@@ -311,7 +312,36 @@ message
 ```
 #### 実行結果
 ```
-Hello Gottn!
+HELLO GOTTN!
+```
+[example7-2.html](examples/example7-2.html)
+```javascript
+let message = Gottn({
+   name: 'Message',
+   data: {
+      message: '',
+      color  : ''
+   },
+   render: function () {
+      return `<div>${this.data.message}</div>`;
+   },
+   $render: function (element) {
+      this.render(element);
+      this.element.style.textTransform = 'uppercase';
+      return this;
+   }
+});
+
+message
+   .store({
+      message: 'Hello Gottn!',
+      color  : 'red'
+   })
+   .$render(document.getElementById('message'));
+```
+#### 実行結果
+```
+HELLO GOTTN!
 ```
 
 ## Step 8: コールバック関数内などでGottnオブジェクトメンバにアクセスする。

@@ -285,9 +285,9 @@ let frame = Gottn({
 ```
 
 ## Step 7: Post-render processing
-- If you want to perform some processing after rendering with the render method, make the processing into a function ($function) and call it after rendering.
+- If you want to perform some processing after drawing with the render method, either make the processing into a function ($function) and call it after drawing, or prepare a function ($function) that summarizes the series of processing.
 ### Example
-[example7.html](examples/example7.html)
+[example7-1.html](examples/example7-1.html)
 ```javascript
 let message = Gottn({
    name: 'Message',
@@ -299,7 +299,8 @@ let message = Gottn({
       return `<div>${this.data.message}</div>`;
    },
    $rendered: function () {
-      this.element.style.color = this.data.color;
+      this.element.style.textTransform = 'uppercase';
+      return this;
    }
 });
 
@@ -313,7 +314,36 @@ message
 ```
 #### Result
 ```
-Hello Gottn!
+HELLO GOTTN!
+```
+[example7-2.html](examples/example7-2.html)
+```javascript
+let message = Gottn({
+   name: 'Message',
+   data: {
+      message: '',
+      color  : ''
+   },
+   render: function () {
+      return `<div>${this.data.message}</div>`;
+   },
+   $render: function (element) {
+      this.render(element);
+      this.element.style.textTransform = 'uppercase';
+      return this;
+   }
+});
+
+message
+   .store({
+      message: 'Hello Gottn!',
+      color  : 'red'
+   })
+   .$render(document.getElementById('message'));
+```
+#### Result
+```
+HELLO GOTTN!
 ```
 
 ## Step 8: Access Gottn members in callback functions

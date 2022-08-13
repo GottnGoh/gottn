@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>example step 7</title>
+		<script type='text/javascript' src='gottn.min.js'></script>
+        <link rel="stylesheet" href="example.css">
+    </head>
+    <body>
+        <h3>Step 7: Post-render processing</h3>
+        <div id="form"></div>
+        <div id="message"></div>
+		<script type="text/javascript">
+            let message = Gottn({
+                name: 'Message',
+                data: {
+                    message: '',
+                    color  : ''
+                },
+                render: function () {
+                    return `<div>${this.data.message}</div>`;
+                },
+                $render: function (element) {
+                    this.render(element);
+                    this.element.style.textTransform = 'uppercase';
+                    return this;
+                }
+            });
+            
+            message
+                .store({
+                    message: 'Hello Gottn!',
+                    color  : 'red'
+                })
+                .$render(document.getElementById('message'));
+        </script>
+    </body>
+</html>

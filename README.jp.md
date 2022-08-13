@@ -98,10 +98,10 @@ console.log('element', message.element);
 ```
 name Message
 id Message-84d85839-0dc4-4df5-9cda-6a3a7e8a132c
-html <div data-gottn-id="Message-84d85839-0dc4-4df5-9cda-6a3a7e8a132c">Hello Gottn!</div>
 data {
    message: 'Hello Gottn!'
 }
+html <div data-gottn-id="Message-84d85839-0dc4-4df5-9cda-6a3a7e8a132c">Hello Gottn!</div>
 element (HTMLElement)
 ```
 

@@ -13,8 +13,7 @@
             let message = Gottn({
                 name: 'Message',
                 data: {
-                    message: '',
-                    color  : ''
+                    message: ''
                 },
                 render: function () {
                     return `<div>${this.data.message}</div>`;
@@ -26,10 +25,7 @@
             });
             
             message
-                .store({
-                    message: 'Hello Gottn!',
-                    color  : 'red'
-                })
+                .store({ message: 'Hello Gottn!' })
                 .render(document.getElementById('message'))
                 .$rendered();
         </script>

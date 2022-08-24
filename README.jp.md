@@ -290,8 +290,7 @@ let frame = Gottn({
 let message = Gottn({
    name: 'Message',
    data: {
-      message: '',
-      color  : ''
+      message: ''
    },
    render: function () {
       return `<div>${this.data.message}</div>`;
@@ -303,10 +302,7 @@ let message = Gottn({
 });
 
 message
-   .store({
-      message: 'Hello Gottn!',
-      color  : 'red'
-   })
+   .store({ message: 'Hello Gottn!' })
    .render(document.getElementById('message'))
    .$rendered();
 ```
@@ -319,8 +315,7 @@ HELLO GOTTN!
 let message = Gottn({
    name: 'Message',
    data: {
-      message: '',
-      color  : ''
+      message: ''
    },
    render: function () {
       return `<div>${this.data.message}</div>`;
@@ -333,10 +328,7 @@ let message = Gottn({
 });
 
 message
-   .store({
-      message: 'Hello Gottn!',
-      color  : 'red'
-   })
+   .store({ message: 'Hello Gottn!' })
    .$render(document.getElementById('message'));
 ```
 #### 実行結果
